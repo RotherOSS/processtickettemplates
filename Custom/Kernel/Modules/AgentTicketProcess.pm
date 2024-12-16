@@ -930,6 +930,85 @@ sub _RenderAjax {
         }
     }
 
+# Rother OSS / ProcessTicketTemplates
+    # update ticket body and attachements if needed.
+    if ( $ChangedElements{StandardTemplateID} ) {
+        my @TicketAttachments;
+        my $TemplateText;
+
+        my $UploadCacheObject = $Kernel::OM->Get('Kernel::System::Web::UploadCache');
+
+        # remove all attachments from the Upload cache
+        my $RemoveSuccess = $UploadCacheObject->FormIDRemove(
+            FormID => $Self->{FormID},
+        );
+        if ( !$RemoveSuccess ) {
+            $Kernel::OM->Get('Kernel::System::Log')->Log(
+                Priority => 'error',
+                Message  => "Form attachments could not be deleted!",
+            );
+        }
+
+        # get the template text and set new attachments if a template is selected
+        if ( IsPositiveInteger( $Param{GetParam}{StandardTemplateID} ) ) {
+            my $TemplateGenerator = $Kernel::OM->Get('Kernel::System::TemplateGenerator');
+
+            # set template text, replace smart tags (limited as ticket is not created)
+            $TemplateText = $TemplateGenerator->Template(
+                TemplateID     => $Param{GetParam}{StandardTemplateID},
+                UserID         => $Self->{UserID},
+                CustomerUserID => $Param{GetParam}{CustomerUserID} || '',
+            );
+
+            # create StdAttachmentObject
+            my $StdAttachmentObject = $Kernel::OM->Get('Kernel::System::StdAttachment');
+
+            # add std. attachments to ticket
+            my %AllStdAttachments = $StdAttachmentObject->StdAttachmentStandardTemplateMemberList(
+                StandardTemplateID => $Param{GetParam}{StandardTemplateID},
+            );
+            for ( sort keys %AllStdAttachments ) {
+                my %AttachmentsData = $StdAttachmentObject->StdAttachmentGet( ID => $_ );
+                $UploadCacheObject->FormIDAddFile(
+                    FormID      => $Self->{FormID},
+                    Disposition => 'attachment',
+                    %AttachmentsData,
+                );
+            }
+
+            # send a list of attachments in the upload cache back to the clientside JavaScript
+            # which renders then the list of currently uploaded attachments
+            @TicketAttachments = $UploadCacheObject->FormIDGetAllFilesMeta(
+                FormID => $Self->{FormID},
+            );
+
+            for my $Attachment (@TicketAttachments) {
+                $Attachment->{Filesize} = $LayoutObject->HumanReadableDataSize(
+                    Size => $Attachment->{Filesize},
+                );
+            }
+        }
+
+        push @JSONCollector, (
+
+            # TODO obsolete?
+            {
+                Name => 'UseTemplateProcessDialog',
+                Data => '0',
+            },
+            {
+                Name => 'RichText',
+                Data => $TemplateText || '',
+            },
+            {
+                Name     => 'TicketAttachments',
+                Data     => \@TicketAttachments,
+                KeepData => 1,
+            },
+        );
+    }
+
+# EO ProcessTicketTemplates
     my $JSON = $LayoutObject->BuildSelectionJSON( [@JSONCollector] );
 
     return $LayoutObject->Attachment(
@@ -2385,8 +2464,10 @@ sub _OutputActivityDialog {
         elsif ( $Self->{NameToID}->{$CurrentField} eq 'Article' ) {
             next DIALOGFIELD if $RenderedFields{ $Self->{NameToID}->{$CurrentField} };
 
+# Rother OSS / ProcessTicketTemplates
             my $StandardTemplates = $Self->_GetStandardTemplates( $Param{GetParam}->%* );
 
+# EO ProcessTicketTemplates
             my $Response = $Self->_RenderArticle(
                 ActivityDialogField => $ActivityDialog->{Fields}{$CurrentField},
                 FieldName           => $CurrentField,
@@ -3080,10 +3161,6 @@ sub _RenderArticle {
 
     # build text template string
     if ( IsHashRefWithData( \%StandardTemplates ) ) {
-
-        my $SelectableStandardTemplates = $Self->_GetStandardTemplates(
-            %{ $Param{GetParam} },
-        );
 
         my $SelectedValue;
 
@@ -6084,15 +6161,9 @@ sub _CheckField {
 
             $Value = 1;
 
-# Rother OSS / ProcessTicketTemplates
-#             my ( $Body, $Subject, $AttachmentExists, $TimeUnits ) = (
-            my ( $Body, $Subject, $StandardTemplateID, $AttachmentExists, $TimeUnits ) = (
-# EO ProcessTicketTemplates
+            my ( $Body, $Subject, $AttachmentExists, $TimeUnits ) = (
                 $ParamObject->GetParam( Param => 'Body' ),
                 $ParamObject->GetParam( Param => 'Subject' ),
-# Rother OSS / ProcessTicketTemplates
-                $ParamObject->GetParam( Param => 'StandardTemplateID' ),
-# EO ProcessTicketTemplates
                 $ParamObject->GetParam( Param => 'AttachmentExists' ),
                 $ParamObject->GetParam( Param => 'TimeUnits' )
             );
