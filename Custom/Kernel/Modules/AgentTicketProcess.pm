@@ -66,6 +66,9 @@ sub new {
         ResponsibleID  => 'ResponsibleID',
         PendingTime    => 'PendingTime',
         Article        => 'Article',
+# Rother OSS / ProcessTicketTemplates
+        StandardTemplateID => 'StandardTemplateID',
+# EO ProcessTicketTemplates
     };
 
     return $Self;
@@ -736,6 +739,29 @@ sub _RenderAjax {
             );
             $FieldsProcessed{ $Self->{NameToID}{$CurrentField} } = 1;
         }
+# Rother OSS / ProcessTicketTemplates
+        elsif ( $Self->{NameToID}{$CurrentField} eq 'StandardTemplateID' ) {
+            next DIALOGFIELD if $FieldsProcessed{ $Self->{NameToID}{$CurrentField} };
+
+            my $Data = $Self->_GetStandardTemplates(
+                %{ $Param{GetParam} },
+            );
+
+            # Add StandardTemplate to the JSONCollector (Use SelectedID from web request).
+            push(
+                @JSONCollector,
+                {
+                    Name         => $Self->{NameToID}{$CurrentField},
+                    Data         => $Data,
+                    SelectedID   => $ParamObject->GetParam( Param => 'StandardTemplateID' ) || '',
+                    PossibleNone => 1,
+                    Translation  => 1,
+                    Max          => 100,
+                },
+            );
+            $FieldsProcessed{ $Self->{NameToID}{$CurrentField} } = 1;
+        }
+# EO ProcessTicketTemplates
     }
 
     my $DynamicFieldBackendObject = $Kernel::OM->Get('Kernel::System::DynamicField::Backend');
@@ -2359,6 +2385,8 @@ sub _OutputActivityDialog {
         elsif ( $Self->{NameToID}->{$CurrentField} eq 'Article' ) {
             next DIALOGFIELD if $RenderedFields{ $Self->{NameToID}->{$CurrentField} };
 
+            my $StandardTemplates = $Self->_GetStandardTemplates( $Param{GetParam}->%* );
+
             my $Response = $Self->_RenderArticle(
                 ActivityDialogField => $ActivityDialog->{Fields}{$CurrentField},
                 FieldName           => $CurrentField,
@@ -2369,6 +2397,9 @@ sub _OutputActivityDialog {
                 FormID              => $Self->{FormID},
                 GetParam            => $Param{GetParam},
                 InformAgents        => $ActivityDialog->{Fields}->{Article}->{Config}->{InformAgents},
+# Rother OSS / ProcessTicketTemplates
+                StandardTemplates => $StandardTemplates,
+# EO ProcessTicketTemplates
             );
 
             if ( !$Response->{Success} ) {
@@ -3039,21 +3070,53 @@ sub _RenderArticle {
         );
     }
 
+# Rother OSS / ProcessTicketTemplates
     # check if exists create templates regardless the queue
-    my %StandardTemplates = $Kernel::OM->Get('Kernel::System::StandardTemplate')->StandardTemplateList(
+    my $StandardTemplateObject = $Kernel::OM->Get('Kernel::System::StandardTemplate');
+    my %StandardTemplates = $StandardTemplateObject->StandardTemplateList(
         Valid => 1,
         Type  => 'ProcessDialog',
     );
-    use Data::Dx;
-    Dx %StandardTemplates;
 
     # build text template string
     if ( IsHashRefWithData( \%StandardTemplates ) ) {
+
+        my $SelectableStandardTemplates = $Self->_GetStandardTemplates(
+            %{ $Param{GetParam} },
+        );
+
+        my $SelectedValue;
+
+        my $StandardTemplateIDParam = $Param{GetParam}{StandardTemplateID};
+        if ($StandardTemplateIDParam) {
+            $SelectedValue = $StandardTemplateObject->StandardTemplateLookup(
+                StandardTemplateID => $StandardTemplateIDParam,
+            );
+        }
+
+        # TODO implement default value for StandardTemplateID?
+        # if ( !$SelectedValue ) {
+
+        #     # Fetch DefaultValue from Config
+        #     $SelectedValue = $StandardTemplateObject->StandardTemplateLookup(
+        #         StandardTemplate => $Param{ActivityDialogField}->{DefaultValue} || '',
+        #     );
+        #     if ($SelectedValue) {
+        #         $SelectedValue = $Param{ActivityDialogField}->{DefaultValue};
+        #     }
+        # }
+
+        # set server errors
+        my $ServerError = '';
+        if ( IsHashRefWithData( $Param{Error} ) && $Param{Error}->{'StandardTemplateID'} ) {
+            $ServerError = 'ServerError';
+        }
+
         $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
             Data         => $Param{StandardTemplates} || {},
             Name         => 'StandardTemplateID',
-            SelectedID   => $Param{StandardTemplateID} || '',
-            Class        => 'Modernize',
+            SelectedValue => $SelectedValue,
+            Class        => "Modernize $ServerError",
             PossibleNone => 1,
             Sort         => 'AlphanumericValue',
             Translation  => 1,
@@ -3065,6 +3128,7 @@ sub _RenderArticle {
         );
     }
 
+# EO ProcessTicketTemplates
     if ( $Param{InformAgents} ) {
 
         my %ShownUsers;
@@ -5324,6 +5388,9 @@ sub _StoreActivityDialog {
             DFPossibleValues       => \%DynamicFieldPossibleValues,
             GetParam               => $Param{GetParam},
             Notify                 => \@Notify,
+# Rother OSS / ProcessTicketTemplates
+            StandardTemplates => '',
+# EO ProcessTicketTemplates
         );
     }
 
