@@ -42,6 +42,17 @@
 <div class="Field FieldExplanation">[% Translate(Data.DescriptionShort) | html %]</div>
 [% RenderBlockEnd("rw:Article:DescriptionShort") %]
 
+# Rother OSS / ProcessTicketTemplates
+[% RenderBlockStart("StandardTemplate") %]
+                    <label for="StandardTemplateID">[% Translate("Text Template") | html %]:</label>
+                    <div class="Field">
+                        [% Data.StandardTemplateStrg %]
+                        <p class="FieldExplanation">[% Translate("Setting a template will overwrite any text or attachment.") | html %]</p>
+                    </div>
+                    <div class="Clear"></div>
+[% RenderBlockEnd("StandardTemplate") %]
+
+# EO ProcessTicketTemplates
 <label class="[% Data.MandatoryClass | html %]" for="RichText">
 [% RenderBlockStart("LabelSpanBody") %]
     <span class="Marker">*</span>
