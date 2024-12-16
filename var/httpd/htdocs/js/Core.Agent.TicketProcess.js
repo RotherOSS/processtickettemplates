@@ -205,6 +205,16 @@ Core.Agent.TicketProcess = (function (TargetNS) {
             return false;
         });
 
+// Rother OSS / ProcessTicketTemplates
+        // Bind event to StandardTemplate field.
+        $('#StandardTemplateID').on('change', function () {
+            Core.Agent.TicketAction.ConfirmTemplateOverwrite('RichText', $(this), function () {
+                Core.AJAX.FormUpdate($('#RichText').closest('form'), 'AJAXUpdate', 'StandardTemplateID');
+            });
+            return false;
+        });
+
+// EO ProcessTicketTemplates
         // If process is pre-selected trigger change event on ProcessEntityID field.
         if ($('#ProcessEntityID').val() !== "") {
             $('#ProcessEntityID').trigger('change');
