@@ -1101,6 +1101,9 @@ sub _GetParam {
 
             $GetParam{Subject} = $ParamObject->GetParam( Param => 'Subject' );
             $GetParam{Body}    = $ParamObject->GetParam( Param => 'Body' );
+# Rother OSS / ProcessTicketTemplates
+            $GetParam{StandardTemplateID} = $ParamObject->GetParam( Param => 'StandardTemplateID' );
+# EO ProcessTicketTemplates
             @{ $GetParam{InformUserID} } = $ParamObject->GetArray(
                 Param => 'InformUserID',
             );
@@ -5988,9 +5991,15 @@ sub _CheckField {
 
             $Value = 1;
 
-            my ( $Body, $Subject, $AttachmentExists, $TimeUnits ) = (
+# Rother OSS / ProcessTicketTemplates
+#             my ( $Body, $Subject, $AttachmentExists, $TimeUnits ) = (
+            my ( $Body, $Subject, $StandardTemplateID, $AttachmentExists, $TimeUnits ) = (
+# EO ProcessTicketTemplates
                 $ParamObject->GetParam( Param => 'Body' ),
                 $ParamObject->GetParam( Param => 'Subject' ),
+# Rother OSS / ProcessTicketTemplates
+                $ParamObject->GetParam( Param => 'StandardTemplateID' ),
+# EO ProcessTicketTemplates
                 $ParamObject->GetParam( Param => 'AttachmentExists' ),
                 $ParamObject->GetParam( Param => 'TimeUnits' )
             );
@@ -6549,6 +6558,52 @@ sub _GetTypes {
     return \%Type;
 }
 
+# Rother OSS / ProcessTicketTemplates
+sub _GetStandardTemplates {
+    my ( $Self, %Param ) = @_;
+
+    my %Templates;
+    my $QueueID = $Param{QueueID} || '';
+
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+    my $QueueObject  = $Kernel::OM->Get('Kernel::System::Queue');
+
+    if ( !$QueueID ) {
+        my $UserDefaultQueue = $ConfigObject->Get('Ticket::Frontend::UserDefaultQueue') || '';
+
+        if ($UserDefaultQueue) {
+            $QueueID = $QueueObject->QueueLookup( Queue => $UserDefaultQueue );
+        }
+    }
+
+    # check needed
+    return \%Templates if !$QueueID && !$Param{TicketID};
+
+    if ( !$QueueID && $Param{TicketID} ) {
+
+        # get QueueID from the ticket
+        my %Ticket = $Kernel::OM->Get('Kernel::System::Ticket')->TicketGet(
+            TicketID      => $Param{TicketID},
+            DynamicFields => 0,
+            UserID        => $Self->{UserID},
+        );
+        $QueueID = $Ticket{QueueID} || '';
+    }
+
+    # fetch all std. templates
+    my %StandardTemplates = $QueueObject->QueueStandardTemplateMemberList(
+        QueueID       => $QueueID,
+        TemplateTypes => 1,
+    );
+
+    # return empty hash if there are no templates for this screen
+    return \%Templates if !IsHashRefWithData( $StandardTemplates{ProcessDialog} );
+
+    # return just the templates for this screen
+    return $StandardTemplates{ProcessDialog};
+}
+
+# EO ProcessTicketTemplates
 sub _ShowDialogError {
     my ( $Self, %Param ) = @_;
 
