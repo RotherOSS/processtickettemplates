@@ -5465,9 +5465,6 @@ sub _StoreActivityDialog {
             DFPossibleValues       => \%DynamicFieldPossibleValues,
             GetParam               => $Param{GetParam},
             Notify                 => \@Notify,
-# Rother OSS / ProcessTicketTemplates
-            StandardTemplates => '',
-# EO ProcessTicketTemplates
         );
     }
 
