@@ -3039,6 +3039,32 @@ sub _RenderArticle {
         );
     }
 
+    # check if exists create templates regardless the queue
+    my %StandardTemplates = $Kernel::OM->Get('Kernel::System::StandardTemplate')->StandardTemplateList(
+        Valid => 1,
+        Type  => 'ProcessDialog',
+    );
+    use Data::Dx;
+    Dx %StandardTemplates;
+
+    # build text template string
+    if ( IsHashRefWithData( \%StandardTemplates ) ) {
+        $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
+            Data         => $Param{StandardTemplates} || {},
+            Name         => 'StandardTemplateID',
+            SelectedID   => $Param{StandardTemplateID} || '',
+            Class        => 'Modernize',
+            PossibleNone => 1,
+            Sort         => 'AlphanumericValue',
+            Translation  => 1,
+            Max          => 200,
+        );
+        $LayoutObject->Block(
+            Name => 'StandardTemplate',
+            Data => {%Param},
+        );
+    }
+
     if ( $Param{InformAgents} ) {
 
         my %ShownUsers;
