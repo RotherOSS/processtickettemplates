@@ -13,6 +13,7 @@
         <File Permission="660" Location="Custom/Kernel/Output/HTML/Templates/Standard/AdminProcessManagementActivityDialog.tt" />
         <File Permission="660" Location="Custom/Kernel/Output/HTML/Templates/Standard/ProcessManagement/Article.tt" />
         <File Permission="660" Location="Kernel/Config/Files/XML/ProcessTicketTemplates.xml" />
+        <File Permission="660" Location="Kernel/Language/de_ProcessTicketTemplates.pm" />
         <File Permission="660" Location="var/httpd/htdocs/js/Core.Agent.Admin.ProcessManagement.js" />
         <File Permission="660" Location="var/httpd/htdocs/js/Core.Agent.TicketProcess.js" />
     </Filelist>
