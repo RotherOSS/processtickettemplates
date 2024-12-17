@@ -749,7 +749,7 @@ sub _RenderAjax {
             push(
                 @JSONCollector,
                 {
-                    Name         => 'StandardTemplates',
+                    Name         => 'StandardTemplateID',
                     Data         => $Data,
                     SelectedID   => $ParamObject->GetParam( Param => 'StandardTemplateID' ) || '',
                     PossibleNone => 1,
