@@ -6,7 +6,7 @@
     <Vendor>Rother OSS GmbH</Vendor>
     <URL>https://otobo.io/</URL>
     <License>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</License>
-    <Description Lang="en">..</Description>
+    <Description Lang="en">The package ProcessTicketTemplates enables standard templates for process management activity dialogs.</Description>
     <Filelist>
         <File Permission="660" Location="Custom/Kernel/Modules/AdminProcessManagementActivityDialog.pm" />
         <File Permission="660" Location="Custom/Kernel/Modules/AgentTicketProcess.pm" />
