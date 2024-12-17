@@ -66,9 +66,6 @@ sub new {
         ResponsibleID  => 'ResponsibleID',
         PendingTime    => 'PendingTime',
         Article        => 'Article',
-# Rother OSS / ProcessTicketTemplates
-        StandardTemplateID => 'StandardTemplateID',
-# EO ProcessTicketTemplates
     };
 
     return $Self;
@@ -739,9 +736,10 @@ sub _RenderAjax {
             );
             $FieldsProcessed{ $Self->{NameToID}{$CurrentField} } = 1;
         }
+    }
 # Rother OSS / ProcessTicketTemplates
-        elsif ( $Self->{NameToID}{$CurrentField} eq 'StandardTemplateID' ) {
-            next DIALOGFIELD if $FieldsProcessed{ $Self->{NameToID}{$CurrentField} };
+
+    if ( $ActivityDialog->{Fields}{Article} && $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} ) {
 
             my $Data = $Self->_GetStandardTemplates(
                 %{ $Param{GetParam} },
@@ -751,7 +749,7 @@ sub _RenderAjax {
             push(
                 @JSONCollector,
                 {
-                    Name         => $Self->{NameToID}{$CurrentField},
+                    Name         => 'StandardTemplates',
                     Data         => $Data,
                     SelectedID   => $ParamObject->GetParam( Param => 'StandardTemplateID' ) || '',
                     PossibleNone => 1,
@@ -759,10 +757,8 @@ sub _RenderAjax {
                     Max          => 100,
                 },
             );
-            $FieldsProcessed{ $Self->{NameToID}{$CurrentField} } = 1;
-        }
-# EO ProcessTicketTemplates
     }
+# EO ProcessTicketTemplates
 
     my $DynamicFieldBackendObject = $Kernel::OM->Get('Kernel::System::DynamicField::Backend');
     my $FieldRestrictionsObject   = $Kernel::OM->Get('Kernel::System::Ticket::FieldRestrictions');
