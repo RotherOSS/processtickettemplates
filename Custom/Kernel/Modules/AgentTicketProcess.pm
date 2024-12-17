@@ -739,7 +739,12 @@ sub _RenderAjax {
     }
 # Rother OSS / ProcessTicketTemplates
 
-    if ( $ActivityDialog->{Fields}{Article} && $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} ) {
+    # activate standard templates if article is configured and standard templates are not explicitly set to 0
+    my $ActivateStandardTemplates = 0;
+    if ( $ActivityDialog->{Fields}{Article} ) {
+        $ActivateStandardTemplates = defined $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} ? $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} : 1;
+    }
+    if ( $ActivateStandardTemplates ) {
 
             my $Data = $Self->_GetStandardTemplates(
                 %{ $Param{GetParam} },
@@ -800,17 +805,19 @@ sub _RenderAjax {
     );
 # Rother OSS / ProcessTicketTemplates
 
-    my $StandardTemplates = $Self->_GetStandardTemplates( $Param{GetParam}->%* );
+    if ( $ActivateStandardTemplates ) {
+        my $StandardTemplates = $Self->_GetStandardTemplates( $Param{GetParam}->%* );
 
-    # check whether current selected value is still valid for the field
-    if (
-        $Param{GetParam}{ 'StandardTemplateID' }
-        && !$StandardTemplates->{ $Param{GetParam}{ 'StandardTemplateID' } }
-        )
-    {
-        # if not empty the field
-        $Param{GetParam}{ 'StandardTemplateID' }           = '';
-        $ChangedElements{ 'StandardTemplateID' }   = 1;
+        # check whether current selected value is still valid for the field
+        if (
+            $Param{GetParam}{StandardTemplateID}
+            && !$StandardTemplates->{ $Param{GetParam}{StandardTemplateID} }
+            )
+        {
+            # if not empty the field
+            $Param{GetParam}{StandardTemplateID} = '';
+            $ChangedElements{StandardTemplateID} = 1;
+        }
     }
 # EO ProcessTicketTemplates
 
@@ -943,7 +950,7 @@ sub _RenderAjax {
 
 # Rother OSS / ProcessTicketTemplates
     # update ticket body and attachements if needed.
-    if ( $ChangedElements{StandardTemplateID} ) {
+    if ( $ActivateStandardTemplates && $ChangedElements{StandardTemplateID} ) {
         my @TicketAttachments;
         my $TemplateText;
 
@@ -1001,8 +1008,6 @@ sub _RenderAjax {
         }
 
         push @JSONCollector, (
-
-            # TODO obsolete?
             {
                 Name => 'UseTemplateProcessDialog',
                 Data => '0',
@@ -3163,7 +3168,8 @@ sub _RenderArticle {
     }
 
 # Rother OSS / ProcessTicketTemplates
-    if ( $Param{ActivityDialogField}{Config}{StandardTemplates} ) {
+    my $ActivateStandardTemplates = defined $Param{ActivityDialogField}{Config}{StandardTemplates} ? $Param{ActivityDialogField}{Config}{StandardTemplates} : 1;
+    if ( $ActivateStandardTemplates ) {
 
         # check if exists create templates regardless the queue
         my $StandardTemplateObject = $Kernel::OM->Get('Kernel::System::StandardTemplate');
