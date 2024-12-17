@@ -8,7 +8,9 @@
     <License>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</License>
     <Description Lang="en">..</Description>
     <Filelist>
+        <File Permission="660" Location="Custom/Kernel/Modules/AdminProcessManagementActivityDialog.pm" />
         <File Permission="660" Location="Custom/Kernel/Modules/AgentTicketProcess.pm" />
+        <File Permission="660" Location="Custom/Kernel/Output/HTML/Templates/Standard/AdminProcessManagementActivityDialog.tt" />
         <File Permission="660" Location="Custom/Kernel/Output/HTML/Templates/Standard/ProcessManagement/Article.tt" />
         <File Permission="660" Location="Kernel/Config/Files/XML/ProcessTicketTemplates.xml" />
         <File Permission="660" Location="var/httpd/htdocs/js/Core.Agent.TicketProcess.js" />
