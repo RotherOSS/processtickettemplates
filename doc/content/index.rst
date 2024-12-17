@@ -29,7 +29,7 @@ Usage
 After installation, it is possible to use standard templates in process activity dialog articles in the agent interface. When opening an activity dialog containing an article, a drop down input field will appear, offering all standard templates of type 'Process dialog' and activated for the selected queue (compare figure 3.1).
 
  .. figure:: images/standard_templates_dropdown.png
-    :scale: 70%
+    :scale: 50%
     :alt: Drop down input field for standard templates in agent process ticket mask.
 
     Drop down input field for standard templates in agent process ticket mask.
