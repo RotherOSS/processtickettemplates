@@ -26,9 +26,31 @@ Third-party software
 
 Usage
 =====
+After installation, it is possible to use standard templates in process activity dialog articles in the agent interface. When opening an activity dialog containing an article, a drop down input field will appear, offering all standard templates of type 'Process dialog' and activated for the selected queue (compare figure 1).
+
+ .. figure:: images/standard_templates_dropdown.png
+    :alt: Drop down input field for standard templates in agent process ticket mask.
+
+    Drop down input field for standard templates in agent process ticket mask.
+
+.. attention::
+
+   The feature will be enabled per default in the agent interface for all activity dialogs containing articles.
 
 Setup
 -----
+The package introduces the new standard template type 'Process dialog'. Only templates of this type can be used in process activity dialogs.
+
+Optionally, the feature can be enabled or disabled per activity dialog. To achieve this, please perform the following steps:
+
+#. Navigate to 'Process Management' in the administration area
+#. Select the process which you want to edit
+#. In the widget 'Available Process Elements' on the left, expand 'Activity Dialogs'
+#. Click on the 'Edit' symbol in the row of the activity dialog which you want to edit
+#. Click on the 'Edit' symbol next to the entry 'Article' in the list 'Assigned Fields'
+#. Select the desired option for 'Standard Templates'
+#. Save everything
+#. Deploy the process
 
 Configuration Reference
 -----------------------
