@@ -798,6 +798,21 @@ sub _RenderAjax {
         ACLPreselection           => $ACLPreselection // '',
         LoopProtection            => \$LoopProtection,
     );
+# Rother OSS / ProcessTicketTemplates
+
+    my $StandardTemplates = $Self->_GetStandardTemplates( $Param{GetParam}->%* );
+
+    # check whether current selected value is still valid for the field
+    if (
+        $Param{GetParam}{ 'StandardTemplateID' }
+        && !$StandardTemplates->{ $Param{GetParam}{ 'StandardTemplateID' } }
+        )
+    {
+        # if not empty the field
+        $Param{GetParam}{ 'StandardTemplateID' }           = '';
+        $ChangedElements{ 'StandardTemplateID' }   = 1;
+    }
+# EO ProcessTicketTemplates
 
     $Param{GetParam}{DynamicField} //= {};
 
