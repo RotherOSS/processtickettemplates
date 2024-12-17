@@ -3152,57 +3152,48 @@ sub _RenderArticle {
     }
 
 # Rother OSS / ProcessTicketTemplates
-    # check if exists create templates regardless the queue
-    my $StandardTemplateObject = $Kernel::OM->Get('Kernel::System::StandardTemplate');
-    my %StandardTemplates = $StandardTemplateObject->StandardTemplateList(
-        Valid => 1,
-        Type  => 'ProcessDialog',
-    );
+    if ( $Param{ActivityDialogField}{Config}{StandardTemplates} ) {
 
-    # build text template string
-    if ( IsHashRefWithData( \%StandardTemplates ) ) {
+        # check if exists create templates regardless the queue
+        my $StandardTemplateObject = $Kernel::OM->Get('Kernel::System::StandardTemplate');
+        my %StandardTemplates = $StandardTemplateObject->StandardTemplateList(
+            Valid => 1,
+            Type  => 'ProcessDialog',
+        );
 
-        my $SelectedValue;
+        # build text template string
+        if ( IsHashRefWithData( \%StandardTemplates ) ) {
 
-        my $StandardTemplateIDParam = $Param{GetParam}{StandardTemplateID};
-        if ($StandardTemplateIDParam) {
-            $SelectedValue = $StandardTemplateObject->StandardTemplateLookup(
-                StandardTemplateID => $StandardTemplateIDParam,
+            my $SelectedValue;
+
+            my $StandardTemplateIDParam = $Param{GetParam}{StandardTemplateID};
+            if ($StandardTemplateIDParam) {
+                $SelectedValue = $StandardTemplateObject->StandardTemplateLookup(
+                    StandardTemplateID => $StandardTemplateIDParam,
+                );
+            }
+
+            # set server errors
+            my $ServerError = '';
+            if ( IsHashRefWithData( $Param{Error} ) && $Param{Error}->{'StandardTemplateID'} ) {
+                $ServerError = 'ServerError';
+            }
+
+            $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
+                Data         => $Param{StandardTemplates} || {},
+                Name         => 'StandardTemplateID',
+                SelectedValue => $SelectedValue,
+                Class        => "Modernize $ServerError",
+                PossibleNone => 1,
+                Sort         => 'AlphanumericValue',
+                Translation  => 1,
+                Max          => 200,
+            );
+            $LayoutObject->Block(
+                Name => 'StandardTemplate',
+                Data => {%Param},
             );
         }
-
-        # TODO implement default value for StandardTemplateID?
-        # if ( !$SelectedValue ) {
-
-        #     # Fetch DefaultValue from Config
-        #     $SelectedValue = $StandardTemplateObject->StandardTemplateLookup(
-        #         StandardTemplate => $Param{ActivityDialogField}->{DefaultValue} || '',
-        #     );
-        #     if ($SelectedValue) {
-        #         $SelectedValue = $Param{ActivityDialogField}->{DefaultValue};
-        #     }
-        # }
-
-        # set server errors
-        my $ServerError = '';
-        if ( IsHashRefWithData( $Param{Error} ) && $Param{Error}->{'StandardTemplateID'} ) {
-            $ServerError = 'ServerError';
-        }
-
-        $Param{StandardTemplateStrg} = $LayoutObject->BuildSelection(
-            Data         => $Param{StandardTemplates} || {},
-            Name         => 'StandardTemplateID',
-            SelectedValue => $SelectedValue,
-            Class        => "Modernize $ServerError",
-            PossibleNone => 1,
-            Sort         => 'AlphanumericValue',
-            Translation  => 1,
-            Max          => 200,
-        );
-        $LayoutObject->Block(
-            Name => 'StandardTemplate',
-            Data => {%Param},
-        );
     }
 
 # EO ProcessTicketTemplates
