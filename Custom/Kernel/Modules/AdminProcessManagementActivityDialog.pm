@@ -938,24 +938,8 @@ sub _ShowEdit {
     }
 
 # Rother OSS / ProcessTicketTemplates
-
-    # create StandardTemplate selection ()
-    $Param{StandardTemplatesSelection} = $LayoutObject->BuildSelection(
-        Data => {
-            0 => Translatable('No'),
-            1 => Translatable('Yes'),
-        },
-        SelectedID  => 1,
-        Name        => 'StandardTemplates',
-        ID          => 'StandardTemplates',
-        Sort        => 'AlphanumericKey',
-        Translation => 1,
-        Class       => 'Modernize',
-    );
-
     $LayoutObject->Block(
         Name => 'StandardTemplatesContainer',
-        Data => \%Param,
     );
 
 # EO ProcessTicketTemplates

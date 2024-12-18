@@ -1263,7 +1263,10 @@ Core.Agent.Admin.ProcessManagement = (function (TargetNS) {
 // Rother OSS / ProcessTicketTemplates
 
                                  // add the standard template value to the fieldconfig
-                                 FieldConfigElement.Config.StandardTemplates = $('#StandardTemplates').val();
+                                 FieldConfigElement.Config.StandardTemplates = '0';
+                                 if ($('#StandardTemplates').prop('checked')) {
+                                    FieldConfigElement.Config.StandardTemplates = '1';
+                                 }
 // EO ProcessTicketTemplates
                              }
 
@@ -1326,8 +1329,8 @@ Core.Agent.Admin.ProcessManagement = (function (TargetNS) {
                         $('#TimeUnits').val(FieldConfig.Config.TimeUnits);
                     }
 // Rother OSS / ProcessTicketTemplates
-                    if (FieldConfig.Config.StandardTemplates) {
-                        $('#StandardTemplates').val(FieldConfig.Config.StandardTemplates);
+                    if (FieldConfig.Config.StandardTemplates === '1') {
+                        $('#StandardTemplates').prop("checked", true);
                     }
 // EO ProcessTicketTemplates
                 }
@@ -1359,7 +1362,6 @@ Core.Agent.Admin.ProcessManagement = (function (TargetNS) {
 
                 $('#StandardTemplatesContainer').removeClass('Hidden');
                 $('#StandardTemplatesContainer').prev('label').css('display', 'block');
-                $('#StandardTemplatesContainer .Modernize').trigger('redraw.InputField');
 // EO ProcessTicketTemplates
             }
             else {
