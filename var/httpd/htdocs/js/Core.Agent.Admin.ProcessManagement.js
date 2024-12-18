@@ -1329,7 +1329,7 @@ Core.Agent.Admin.ProcessManagement = (function (TargetNS) {
                         $('#TimeUnits').val(FieldConfig.Config.TimeUnits);
                     }
 // Rother OSS / ProcessTicketTemplates
-                    if (FieldConfig.Config.StandardTemplates === '1') {
+                    if ((typeof FieldConfig.Config.StandardTemplates === 'undefined') || FieldConfig.Config.StandardTemplates === '1') {
                         $('#StandardTemplates').prop("checked", true);
                     }
 // EO ProcessTicketTemplates
