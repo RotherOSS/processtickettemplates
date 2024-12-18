@@ -739,10 +739,10 @@ sub _RenderAjax {
     }
 # Rother OSS / ProcessTicketTemplates
 
-    # activate standard templates if article is configured and standard templates are not explicitly set to 0
+    # activate standard templates if article is configured and standard templates are explicitly enabled
     my $ActivateStandardTemplates = 0;
     if ( $ActivityDialog->{Fields}{Article} ) {
-        $ActivateStandardTemplates = defined $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} ? $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} : 1;
+        $ActivateStandardTemplates = $ActivityDialog->{Fields}{Article}{Config}{StandardTemplates} || 0;
     }
     if ( $ActivateStandardTemplates ) {
 
@@ -3170,7 +3170,7 @@ sub _RenderArticle {
     }
 
 # Rother OSS / ProcessTicketTemplates
-    my $ActivateStandardTemplates = defined $Param{ActivityDialogField}{Config}{StandardTemplates} ? $Param{ActivityDialogField}{Config}{StandardTemplates} : 1;
+    my $ActivateStandardTemplates = $Param{ActivityDialogField}{Config}{StandardTemplates} || 0;
     if ( $ActivateStandardTemplates ) {
 
         # check if exists create templates regardless the queue
