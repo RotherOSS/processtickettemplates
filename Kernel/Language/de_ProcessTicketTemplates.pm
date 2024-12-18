@@ -24,8 +24,9 @@ sub Data {
     my $Self = shift;
 
     # AdminTemplate
-    $Self->{Translation}->{'ProcessDialog'} = 'Prozess-Dialog';
-    $Self->{Translation}->{'Process dialog'} = 'Prozess-Dialog';
+    $Self->{Translation}->{'ProcessDialog'}      = 'Prozess-Dialog';
+    $Self->{Translation}->{'Process dialog'}     = 'Prozess-Dialog';
+    $Self->{Translation}->{'Standard Templates'} = 'Standardvorlagen';
 
     return;
 }
