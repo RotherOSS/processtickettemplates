@@ -36,7 +36,7 @@ After installation, it is possible to use standard templates in process activity
 
 .. attention::
 
-   The feature will be enabled per default in the agent interface for all activity dialogs containing articles.
+   The feature will not take effect until being explicitly enabled in the process activity dialog configuration as described in :ref:`Setup`.
 
 Setup
 -----
