@@ -975,6 +975,8 @@ sub _RenderAjax {
             $TemplateText = $TemplateGenerator->Template(
                 TemplateID     => $Param{GetParam}{StandardTemplateID},
                 UserID         => $Self->{UserID},
+                TicketID       => $Param{GetParam}{TicketID},
+                Data           => $Param{GetParam},
                 CustomerUserID => $Param{GetParam}{CustomerUserID} || '',
             );
 
