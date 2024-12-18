@@ -971,12 +971,11 @@ sub _RenderAjax {
         if ( IsPositiveInteger( $Param{GetParam}{StandardTemplateID} ) ) {
             my $TemplateGenerator = $Kernel::OM->Get('Kernel::System::TemplateGenerator');
 
-            # set template text, replace smart tags (limited as ticket is not created)
+            # set template text, replace smart tags
             $TemplateText = $TemplateGenerator->Template(
                 TemplateID     => $Param{GetParam}{StandardTemplateID},
                 UserID         => $Self->{UserID},
                 TicketID       => $Param{GetParam}{TicketID},
-                Data           => $Param{GetParam},
                 CustomerUserID => $Param{GetParam}{CustomerUserID} || '',
             );
 
@@ -6740,10 +6739,10 @@ sub _GetStandardTemplates {
     my $QueueObject  = $Kernel::OM->Get('Kernel::System::Queue');
 
     if ( !$QueueID ) {
-        my $UserDefaultQueue = $ConfigObject->Get('Ticket::Frontend::UserDefaultQueue') || '';
-
-        if ($UserDefaultQueue) {
-            $QueueID = $QueueObject->QueueLookup( Queue => $UserDefaultQueue );
+        my $DefaultQueue   = $ConfigObject->Get("Process::DefaultQueue");
+        my $DefaultQueueID = $QueueObject->QueueLookup( Queue => $DefaultQueue );
+        if ($DefaultQueueID) {
+            $QueueID = $DefaultQueueID;
         }
     }
 
