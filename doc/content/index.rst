@@ -36,11 +36,11 @@ After installation, it is possible to use standard templates in process activity
 
 .. attention::
 
-   The feature will be enabled per default in the agent interface for all activity dialogs containing articles.
+   The feature will be enabled by default in the agent interface for all activity dialogs containing articles.
 
 Setup
 -----
-The package introduces the new standard template type 'Process dialog'. Only templates of this type can be used in process activity dialogs.
+The package introduces the new standard template type 'Process dialog'. Only templates of this type can be used in process activity dialogs. The feature is enabled by default.
 
 Optionally, the feature can be enabled or disabled per activity dialog. To achieve this, please perform the following steps:
 
@@ -49,7 +49,7 @@ Optionally, the feature can be enabled or disabled per activity dialog. To achie
 #. In the widget 'Available Process Elements' on the left, expand 'Activity Dialogs'
 #. Click on the 'Edit' symbol in the row of the activity dialog which you want to edit
 #. Click on the 'Edit' symbol next to the entry 'Article' in the list 'Assigned Fields'
-#. Select the desired option for 'Standard Templates'
+#. Check or uncheck the 'Standard Templates' check box as desired
 #. Save everything
 #. Deploy the process
 
