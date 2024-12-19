@@ -26,7 +26,11 @@ Third-party software
 
 Usage
 =====
-After installation, it is possible to use standard templates in process activity dialog articles in the agent interface. When opening an activity dialog containing an article, a drop down input field will appear, offering all standard templates of type 'Process dialog' and activated for the selected queue (compare figure 3.1).
+After installation, it is possible to use standard templates in process activity dialog articles in the agent interface.
+
+For the feature to work, it is necessary to create standard templates of type 'ProcessDialog' first in the templates screen in the admin area.
+
+When opening an activity dialog containing an article, a drop down input field will appear, offering all standard templates of type 'Process dialog' and activated for the selected queue (compare figure 3.1).
 
  .. figure:: images/standard_templates_dropdown.png
     :scale: 50%
