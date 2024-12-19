@@ -33,7 +33,7 @@ For the feature to work, it is necessary to create standard templates of type 'P
 When opening an activity dialog containing an article, a drop down input field will appear, offering all standard templates of type 'Process dialog' and activated for the selected queue (compare figure 3.1).
 
  .. figure:: images/standard_templates_dropdown.png
-    :scale: 50%
+    :scale: 40%
     :alt: Drop down input field for standard templates in agent process ticket mask.
 
     Drop down input field for standard templates in agent process ticket mask.
