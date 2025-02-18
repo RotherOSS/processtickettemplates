@@ -4,7 +4,7 @@
 # Copyright (C) 2001-2020 OTRS AG, https://otrs.com/
 # Copyright (C) 2019-2025 Rother OSS GmbH, https://otobo.io/
 # --
-# $origin: otobo - e44c18aea9abc125fddf9ceeed204db4fab290e0 - Kernel/Modules/AgentTicketProcess.pm
+# $origin: otobo - 22a578286d6e1560382e51cced18344af801620a - Kernel/Modules/AgentTicketProcess.pm
 # --
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -1202,7 +1202,7 @@ sub _GetParam {
 
     }
     $GetParam{ActivityDialogEntityID} = $ActivityDialogEntityID;
-    $GetParam{ActivityEntityID}       = $ActivityEntityID;
+    $GetParam{ActivityEntityID}       = $ActivityEntityID // $ParamObject->GetParam( Param => 'ActivityEntityID' );
     $GetParam{ProcessEntityID}        = $ProcessEntityID;
 
     # Get the activitydialogs's Submit Param's or Config Params
@@ -1849,6 +1849,13 @@ sub _OutputActivityDialog {
             TicketID               => $Ticket{TicketID} || '',
             LinkTicketID           => $Self->{LinkTicketID},
             ActivityDialogEntityID => $ActivityActivityDialog->{ActivityDialog},
+            ActivityEntityID       => $Param{GetParam}{ActivityEntityID}
+                || $Ticket{
+                    'DynamicField_'
+                    . $ConfigObject->Get(
+                        'Process::DynamicFieldProcessManagementActivityID'
+                    )
+                },
             ProcessEntityID        => $Param{ProcessEntityID}
                 || $Ticket{
                     'DynamicField_'
