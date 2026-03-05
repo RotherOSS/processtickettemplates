@@ -23,12 +23,33 @@ use utf8;
 sub Data {
     my $Self = shift;
 
-    # AdminTemplate
-    $Self->{Translation}->{'ProcessDialog'}      = 'Prozess-Dialog';
-    $Self->{Translation}->{'Process dialog'}     = 'Prozess-Dialog';
+    # Template: AdminProcessManagementActivityDialog
     $Self->{Translation}->{'Standard Templates'} = 'Standardvorlagen';
 
-    return;
+    # SysConfig
+    $Self->{Translation}->{'Process dialog'} = 'Prozess-Dialog';
+
+
+    push @{ $Self->{JavaScriptStrings} // [] }, (
+    'An unconnected transition is already placed on the canvas. Please connect this transition first before placing another transition.',
+    'As soon as you use this button or link, you will leave this screen and its current state will be saved automatically. Do you want to continue?',
+    'Cancel',
+    'Customer interface does not support articles not visible for customers.',
+    'Delete',
+    'Delete Entity',
+    'Edit Field Details',
+    'Error during AJAX communication',
+    'Hide EntityIDs',
+    'Save',
+    'Show EntityIDs',
+    'Sorry, the only existing condition can\'t be removed.',
+    'Sorry, the only existing field can\'t be removed.',
+    'Sorry, the only existing parameter can\'t be removed.',
+    'This Activity is already used in the Process. You cannot add it twice!',
+    'This Transition is already used for this Activity. You cannot use it twice!',
+    'This TransitionAction is already used in this Path. You cannot use it twice!',
+    );
+
 }
 
 1;
