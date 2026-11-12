@@ -6,7 +6,8 @@
     <Vendor>Rother OSS GmbH</Vendor>
     <URL>https://otobo.io/</URL>
     <License>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</License>
-    <Description Lang="en">The package ProcessTicketTemplates enables standard templates for process management activity dialogs in the agent interface.</Description>
+    <Description Lang="en">This package enables standard templates for process management activity dialogs in the agent interface.</Description>
+    <Description Lang="hu">Ez a csomag szabványos sablonokat engedélyez az ügyintézői felületen lévő folyamatkezelés tevékenység-párbeszédablakainál.</Description>
     <Filelist>
         <File Permission="660" Location="Custom/Kernel/Modules/AdminProcessManagementActivityDialog.pm" />
         <File Permission="660" Location="Custom/Kernel/Modules/AgentTicketProcess.pm" />
@@ -14,6 +15,7 @@
         <File Permission="660" Location="Custom/Kernel/Output/HTML/Templates/Standard/ProcessManagement/Article.tt" />
         <File Permission="660" Location="Kernel/Config/Files/XML/ProcessTicketTemplates.xml" />
         <File Permission="660" Location="Kernel/Language/de_ProcessTicketTemplates.pm" />
+        <File Permission="660" Location="Kernel/Language/hu_ProcessTicketTemplates.pm" />
         <File Permission="660" Location="var/httpd/htdocs/js/Core.Agent.Admin.ProcessManagement.js" />
         <File Permission="660" Location="var/httpd/htdocs/js/Core.Agent.TicketProcess.js" />
     </Filelist>
